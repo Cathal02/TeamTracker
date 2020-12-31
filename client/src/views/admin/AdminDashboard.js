@@ -4,22 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import SignIn from '../auth/Signin';
 import { FETCH_USER } from '../../types';
 import { Link } from 'react-router-dom';
-
+import { useFetchUser } from '../../hooks/useFetchUser';
 import CreateProduct from '../products/CreateProduct.js';
+import { getImage } from './getImage';
+
 const AdminDashboard = () => {
 	const isLoggedIn = useSelector((state) => state.isUserLoggedIn);
 	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch();
-	const [ src, setSrc ] = useState('');
-
-	useEffect(() => {
-		axios
-			.get('/api/auth/current_user')
-			.then((res) => {
-				dispatch({ type: FETCH_USER, payload: res.data });
-			})
-			.catch((err) => {});
-	}, []);
 
 	const makeUserAdmin = (e) => {
 		e.preventDefault();
@@ -28,25 +20,7 @@ const AdminDashboard = () => {
 		});
 	};
 
-	const getImage = (e) => {
-		e.preventDefault();
-		var formData = new FormData();
-		formData.append('name', 'dot.png');
-		// axios
-		// 	.post('/api/products/requestImage', formData, {
-		// 		headers: {
-		// 			accept: 'application/json',
-		// 			'Accept-Language': 'en-US,en;q=0.8',
-		// 			'Content-Type': `multipart/form-data; boundary=${formData._boundary}`
-		// 		}
-		// 	})
-		// 	.then((res) => {
-		// 		setSrc(res.data);
-		// 	})
-		// 	.catch((err) => {
-		// 		console.log(err);
-		// 	});
-	};
+	useFetchUser();
 
 	const renderView = () => {
 		if (!isLoggedIn) {
@@ -70,13 +44,11 @@ const AdminDashboard = () => {
 				<form onSubmit={makeUserAdmin}>
 					<button>Remove admin status admin!</button>
 				</form>
-				<form onSubmit={getImage}>
+				<form>
 					<button>Serve image</button>
 				</form>
 				<h1>Welcome, Admin :0</h1>
 				<br />
-				<img src="images/lospolice.jpg.df0727aad53f95864456fbe8e3da0213jpg" />
-
 				<CreateProduct />
 			</div>
 		);

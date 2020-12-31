@@ -3,11 +3,11 @@ import { useDispatch } from 'react-redux';
 
 import axios from 'axios';
 import { FETCH_USER } from '../../types';
+import { useForm } from '../../hooks/useForm.js';
 
 const Signin = () => {
-	const [ email, setEmail ] = useState('');
-	const [ password, setPassword ] = useState('');
-	const [ error, setError ] = useState('');
+	const [ values, handleChange ] = useForm({ email: '', password: '' });
+	const [ error, setError ] = useState("'");
 	const dispatch = useDispatch();
 
 	const onSubmit = (e) => {
@@ -15,8 +15,8 @@ const Signin = () => {
 
 		var formData = new FormData();
 
-		formData.append('email', email);
-		formData.append('password', password);
+		formData.append('email', values.email);
+		formData.append('password', values.password);
 		axios
 			.post('/api/auth/login', formData, {
 				headers: {
@@ -48,15 +48,15 @@ const Signin = () => {
 					name="email"
 					placeholder="email"
 					autoFocus
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
+					value={values.email}
+					onChange={handleChange}
 				/>
 				<input
 					type="text"
-					name="passwod"
+					name="password"
 					placeholder="password"
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
+					value={values.password}
+					onChange={handleChange}
 				/>
 				<button onSubmit={onSubmit}>Submit form</button>
 			</form>
